@@ -1,9 +1,9 @@
-import { logDebug } from './logger';
-import { promisify } from './promisify';
-import { Storage } from './storage';
-import { NeedLoginError, AnotherUserLoginError } from './errors';
+import { logDebug } from "./logger";
+import { promisify } from "./promisify";
+import { Storage } from "./storage";
+import { NeedLoginError, AnotherUserLoginError } from "./errors";
 
-const directusHost = 'http://127.0.0.1:8055';
+const directusHost = "http://127.0.0.1:8055";
 
 /**
  * Promise of Storage
@@ -40,7 +40,7 @@ export function directusHostOrigin() {
  * @param {string} accessToken
  */
 export function assetsUrl(fileId, accessToken) {
-  return directusHost + '/assets/' + fileId + '?access_token=' + accessToken;
+  return directusHost + "/assets/" + fileId + "?access_token=" + accessToken;
 }
 
 export function saveToken(loginInfo) {
@@ -66,7 +66,12 @@ export function resetToken() {
  * @returns {Promise} Promise of data with `ok` and `msg`
  */
 export async function httpPost(path, data, options = {}) {
-  let { noAuthorizationHeader = false, accessToken, params, mapResponse } = options;
+  let {
+    noAuthorizationHeader = false,
+    accessToken,
+    params,
+    mapResponse,
+  } = options;
   logDebug(`POST ${path}`);
 
   if (accessToken === undefined) {
@@ -74,25 +79,25 @@ export async function httpPost(path, data, options = {}) {
   }
 
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
   if (!noAuthorizationHeader) {
     if (!accessToken) {
       throw new Error(`missing access token: ${accessToken}`);
     }
-    headers['Authorization'] = `Bearer ${accessToken}`;
+    headers["Authorization"] = `Bearer ${accessToken}`;
   }
 
   let url = directusHost + path;
   if (params) {
-    url += '?' + params;
+    url += "?" + params;
   }
 
   const res = await promisify(wx.request)({
     url,
     data: JSON.stringify(data),
     header: headers,
-    method: 'POST',
+    method: "POST",
   });
   if (res.statusCode < 200 || res.statusCode > 299) {
     return failure(res);
@@ -110,7 +115,12 @@ export async function httpPost(path, data, options = {}) {
  * @returns {Promise} Promise of data with `ok` and `msg`
  */
 export async function httpGet(path, options = {}) {
-  let { noAuthorizationHeader = false, accessToken, params, mapResponse } = options;
+  let {
+    noAuthorizationHeader = false,
+    accessToken,
+    params,
+    mapResponse,
+  } = options;
   logDebug(`GET ${path}`);
 
   if (accessToken === undefined) {
@@ -122,18 +132,18 @@ export async function httpGet(path, options = {}) {
     if (!accessToken) {
       throw new Error(`missing access token: ${accessToken}`);
     }
-    headers['Authorization'] = `Bearer ${accessToken}`;
+    headers["Authorization"] = `Bearer ${accessToken}`;
   }
 
   let url = directusHost + path;
   if (params) {
-    url += '?' + params;
+    url += "?" + params;
   }
 
   const res = await promisify(wx.request)({
     url,
     header: headers,
-    method: 'GET',
+    method: "GET",
   });
   if (res.statusCode < 200 || res.statusCode > 299) {
     return failure(res);
@@ -172,11 +182,11 @@ function success(res, mapResponse) {
   };
 }
 
-async function getAccessToken() {
+export async function getAccessToken() {
   const storage = await getToken();
   const tokenUserId = decodeUserId(storage.accessToken);
   if (userId !== tokenUserId) {
-    throw new AnotherUserLoginError('user mismatch');
+    throw new AnotherUserLoginError("user mismatch");
   }
   return storage.accessToken;
 }
@@ -189,7 +199,7 @@ async function getRefreshToken() {
 async function getToken() {
   const storage = Storage.load();
   if (!storage) {
-    throw new NeedLoginError('never login');
+    throw new NeedLoginError("never login");
   }
 
   const expiresAt = storage.expiresAt;
@@ -207,7 +217,7 @@ async function getToken() {
 
 async function waitForRefresh() {
   if (!refreshInProgress) {
-    throw new Error('no refresh in progress');
+    throw new Error("no refresh in progress");
   }
 
   try {
@@ -230,7 +240,7 @@ function refresh(storage) {
       logDebug(`SAVE token until ${storage.expiresDate}`);
       return storage;
     } else {
-      throw new NeedLoginError('refresh failure');
+      throw new NeedLoginError("refresh failure");
     }
   };
 
@@ -239,15 +249,15 @@ function refresh(storage) {
 
 async function _refresh(refreshToken) {
   return await httpPost(
-    '/auth/refresh',
+    "/auth/refresh",
     {
       refresh_token: refreshToken,
-      mode: 'json',
+      mode: "json",
     },
     {
       noAuthorizationHeader: true,
       accessToken: null,
-    },
+    }
   );
 }
 
@@ -266,15 +276,15 @@ function decodeUserId(token) {
  * @param {string} token
  */
 function parseJwt(token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
   var jsonPayload = decodeURIComponent(
     atob(base64)
-      .split('')
+      .split("")
       .map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
       })
-      .join(''),
+      .join("")
   );
 
   return JSON.parse(jsonPayload);

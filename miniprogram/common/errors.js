@@ -1,14 +1,14 @@
 export class NeedLoginError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'NeedLoginError';
+    this.name = "NeedLoginError";
   }
 }
 
 export class AnotherUserLoginError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'AnotherUserLoginError';
+    this.name = "AnotherUserLoginError";
   }
 }
 
@@ -19,7 +19,7 @@ export class AnotherUserLoginError extends Error {
 export function reportError(err) {
   wx.showToast({
     title: `系统异常(${err.errno ?? -1}) ${err.errMsg}`,
-    icon: 'none',
+    icon: "none",
     duration: 10000,
   });
 }
