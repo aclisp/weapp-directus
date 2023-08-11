@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "艺考",
-  "usingComponents": {}
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "activity-show": "/components/activity-show/index"
+  }
 }

@@ -1,3 +1,9 @@
-<view class="container">
-  <text>Home</text>
+<view class="main">
+  <view class="head"></view>
+  <view class="body">
+    <activity-show swiper-list="{{swiperList}}"></activity-show>
+  </view>
+  <view class="foot">
+    <view class="version">卓悦艺考</view>
+  </view>
 </view>

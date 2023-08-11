@@ -1,0 +1,14 @@
+<!--components/activity-show/index.wxml-->
+<t-swiper
+  current="{{current}}"
+  autoplay="{{autoplay}}"
+  duration="{{duration}}"
+  interval="{{interval}}"
+  navigation="{{ { type: 'dots' } }}"
+  list="{{swiperList}}"
+  bind:click="onTap"
+  bind:change="onChange"
+  bind:image-load="onImageLoad"
+  height="570"
+>
+</t-swiper>

@@ -2,8 +2,10 @@ import { logDebug } from "./logger";
 import { promisify } from "./promisify";
 import { Storage } from "./storage";
 import { NeedLoginError, AnotherUserLoginError } from "./errors";
+import { URLSearchParams } from "./url-search-params-polyfill";
+import jwtDecode from "./jwt-decode";
 
-const directusHost = "http://127.0.0.1:8055";
+const directusHost = "http://192.168.0.109:8055";
 
 /**
  * Promise of Storage
@@ -28,6 +30,10 @@ function init() {
     userId = decodeUserId(storage.accessToken);
     logDebug(`transport.init.decodeUserId:userId=${userId}`);
   }
+}
+
+export function directusHostUrl() {
+  return directusHost;
 }
 
 export function directusHostOrigin() {
@@ -59,10 +65,10 @@ export function resetToken() {
  * @param {string} path
  * @param {object} data
  * @param {object} options
- * @param {boolean} options.noAuthorizationHeader - 是否加认证请求头
- * @param {string|null} options.accessToken - Skip refreshing the access token if it is null.
- * @param {URLSearchParams} options.params - Global query parameters
- * @param {function} options.mapResponse - JSON response transformer
+ * @param {boolean=} options.noAuthorizationHeader - 是否加认证请求头
+ * @param {(string|null)=} options.accessToken - Skip refreshing the access token if it is null.
+ * @param {URLSearchParams=} options.params - Global query parameters
+ * @param {function=} options.mapResponse - JSON response transformer
  * @returns {Promise} Promise of data with `ok` and `msg`
  */
 export async function httpPost(path, data, options = {}) {
@@ -108,10 +114,10 @@ export async function httpPost(path, data, options = {}) {
 /**
  * @param {string} path
  * @param {object} options
- * @param {boolean} options.noAuthorizationHeader - 是否加认证请求头
- * @param {string|null} options.accessToken - Skip refreshing the access token if it is null.
- * @param {URLSearchParams} options.params - Global query parameters
- * @param {function} options.mapResponse - JSON response transformer
+ * @param {boolean=} options.noAuthorizationHeader - 是否加认证请求头
+ * @param {(string|null)=} options.accessToken - Skip refreshing the access token if it is null.
+ * @param {URLSearchParams=} options.params - Global query parameters
+ * @param {function=} options.mapResponse - JSON response transformer
  * @returns {Promise} Promise of data with `ok` and `msg`
  */
 export async function httpGet(path, options = {}) {
@@ -171,8 +177,10 @@ function success(res, mapResponse) {
   let data;
   if (mapResponse) {
     data = mapResponse(json);
+  } else if (typeof json === "object" && json && "data" in json) {
+    data = Array.isArray(json.data) ? json : json.data;
   } else {
-    data = json.data;
+    data = json;
   }
 
   return {
@@ -266,26 +274,6 @@ async function _refresh(refreshToken) {
  * @returns {string}
  */
 function decodeUserId(token) {
-  const decoded = parseJwt(token);
+  const decoded = jwtDecode(token);
   return decoded.id;
-}
-
-/**
- * https://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-in-javascript-without-using-a-library
- *
- * @param {string} token
- */
-function parseJwt(token) {
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  var jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split("")
-      .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
-  );
-
-  return JSON.parse(jsonPayload);
 }

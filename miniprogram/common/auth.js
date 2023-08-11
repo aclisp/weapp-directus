@@ -1,22 +1,35 @@
 import { logDebug } from "./logger";
-import { httpGet, saveToken, getAccessToken } from "./transport";
+import { promisify } from "./promisify";
+import {
+  httpGet,
+  saveToken,
+  getAccessToken,
+  directusHostUrl,
+} from "./transport";
 import { URLSearchParams } from "./url-search-params-polyfill";
 import { reportError } from "./errors";
 
-const authLoginUrl = "http://localhost:8055/auth/login/wechatminiprogram";
+const authLoginUrl = directusHostUrl() + "/auth/login/wechatminiprogram";
 
+/**
+ * @returns {Promise<string>} accessToken
+ */
 export async function login() {
   logDebug("auth.login.start");
 
   // 避免频繁调用 wx.login
   try {
     const accessToken = await getAccessToken();
+    return accessToken;
   } catch (err) {
     logDebug("auth.login.getAccessToken:err=%o", err);
-    wx.login({
-      success: (res) => doLogin(res),
-      fail: (err) => reportError(err),
-    });
+    try {
+      const res = await promisify(wx.login)({});
+      const accessToken = await doLogin(res.code);
+      return accessToken;
+    } catch (err) {
+      reportError(err);
+    }
   }
 }
 
@@ -26,29 +39,19 @@ export function logout() {
 
 /**
  * 处理 wx.login 成功
- * @param {WechatMiniprogram.LoginSuccessCallbackResult} res
+ * @param {string} code
+ * @returns {Promise<string>} accessToken
  */
-function doLogin(res) {
-  logDebug(`wx.login:code=${res.code}`);
-  // 发送 res.code 到后台换取 openId, sessionKey, unionId
-  wx.request({
+async function doLogin(code) {
+  logDebug(`wx.login:code=${code}`);
+  // 发送 code 到后台换取 openId, sessionKey, unionId
+  const res = await promisify(wx.request)({
     url: authLoginUrl,
-    data: {
-      code: res.code,
-    },
+    data: { code },
     method: "GET",
-    success: async (res) => {
-      logDebug(`wx.request:url=${authLoginUrl},res=%o`, res.data);
-      // 开发者服务器返回自定义登录态，存入storage
-      saveToken(res.data.data);
-      // 获取用户信息
-      // const params = new URLSearchParams();
-      // params.append("fields", "id,first_name,last_name,avatar");
-      // const data = await httpGet("/users/me", { params });
-      // logDebug(`获取用户信息=%o`, data);
-    },
-    fail: (err) => {
-      reportError(err);
-    },
   });
+  logDebug(`wx.request:url=${authLoginUrl},res=%o`, res.data);
+  // 开发者服务器返回自定义登录态，存入storage
+  saveToken(res.data.data);
+  return res.data.data.access_token;
 }

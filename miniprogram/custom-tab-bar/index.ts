@@ -12,7 +12,7 @@ Component({
     list: [
       {
         icon: "app",
-        text: "艺考",
+        text: "报名",
         url: "pages/home/home",
       },
       {
