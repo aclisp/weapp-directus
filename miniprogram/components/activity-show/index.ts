@@ -25,16 +25,7 @@ Component({
   methods: {
     onTap(e: any) {
       const { index } = e.detail;
-
-      console.log(index);
-    },
-    onChange(e: any) {
-      const { current, source } = e.detail;
-
-      console.log(current, source);
-    },
-    onImageLoad(e: any) {
-      console.log(e.detail.index);
+      this.triggerEvent("tap-act", index);
     },
   },
 });

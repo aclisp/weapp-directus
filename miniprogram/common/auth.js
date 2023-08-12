@@ -12,29 +12,45 @@ import { reportError } from "./errors";
 const authLoginUrl = directusHostUrl() + "/auth/login/wechatminiprogram";
 
 /**
- * @returns {Promise<string>} accessToken
+ * @returns {Promise<string|undefined>} accessToken
  */
 export async function login() {
   logDebug("auth.login.start");
 
   // 避免频繁调用 wx.login
   try {
-    const accessToken = await getAccessToken();
-    return accessToken;
+    return await getAccessToken();
   } catch (err) {
     logDebug("auth.login.getAccessToken:err=%o", err);
-    try {
-      const res = await promisify(wx.login)({});
-      const accessToken = await doLogin(res.code);
-      return accessToken;
-    } catch (err) {
-      reportError(err);
-    }
+    return await wxLogin();
+  }
+}
+
+/**
+ * 后台需要使用微信的session_key这个字段时，用这个函数保证session_key不过期是最新的
+ */
+export async function checkSession() {
+  try {
+    await promisify(wx.checkSession)({});
+    //session_key 未过期，并且在本生命周期一直有效
+  } catch (err) {
+    // session_key 已经失效，需要重新执行登录流程
+    await wxLogin();
   }
 }
 
 export function logout() {
   // TODO
+}
+
+async function wxLogin() {
+  try {
+    const res = await promisify(wx.login)({});
+    const accessToken = await doLogin(res.code);
+    return accessToken;
+  } catch (err) {
+    reportError(err);
+  }
 }
 
 /**

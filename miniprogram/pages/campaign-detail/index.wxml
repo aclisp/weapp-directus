@@ -1,0 +1,26 @@
+<!--pages/campaign-detail/index.wxml-->
+<view class="background"></view>
+
+<view class="container-vertical">
+
+  <view class="title">
+    <text wx:for="{{title}}" wx:key="index">{{item}}</text>
+  </view>
+
+  <t-image t-class="poster" src="{{posterUrl}}" mode="aspectFit" 
+    shape="round" show-menu-by-longpress="true"/>
+
+  <t-cell-group t-class="products">
+    <t-cell wx:for="{{products}}" wx:key="index"
+      title="{{item.name}}"
+      description="{{item.price ? item.price + '元' : ''}}"
+      align="top"
+      image="{{item.picture}}"
+      bordered="{{false}}"
+      t-class-description="products__description"
+    />
+  </t-cell-group>
+
+  <t-button t-class="buy-button" icon="add-circle" theme="primary">报名</t-button>
+
+</view>

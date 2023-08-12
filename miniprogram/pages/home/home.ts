@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    actIdList: [],
     swiperList: [],
   },
 
@@ -19,6 +20,7 @@ Page({
       accessToken,
     });
     this.setData({
+      actIdList: data.data.map((x: any) => x.id),
       swiperList: data.data.map((x: any) => assetsUrl(x.poster, accessToken)),
     });
   },
@@ -28,13 +30,20 @@ Page({
    */
   async onLoad() {
     const accessToken = await login();
-    this.loadPage(accessToken);
+    if (accessToken) {
+      this.loadPage(accessToken);
+    }
   },
 
   async onPullDownRefresh() {
     wx.stopPullDownRefresh();
     const accessToken = await getAccessToken();
     this.loadPage(accessToken);
+  },
+
+  onTapAct(e: any) {
+    const actId = this.data.actIdList[e.detail];
+    wx.navigateTo({url: `/pages/campaign-detail/index?id=${actId}`});
   },
 
   /**

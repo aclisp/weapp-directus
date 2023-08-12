@@ -3,7 +3,8 @@
     "pages/home/home",
     "pages/user/user",
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/campaign-detail/index"
   ],
   "tabBar": {
     "custom": true,

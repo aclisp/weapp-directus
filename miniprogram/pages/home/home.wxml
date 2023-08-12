@@ -1,7 +1,9 @@
 <view class="background"></view>
 
 <view class="content-wrapper">
-  <activity-show swiper-list="{{swiperList}}"></activity-show>
+  <activity-show swiper-list="{{swiperList}}"
+    bind:tap-act="onTapAct"
+  ></activity-show>
 </view>
     
 <view class="version">卓悦艺考</view>

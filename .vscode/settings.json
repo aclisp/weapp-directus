@@ -21,5 +21,6 @@
     "wrap_attributes": "force-expand-multiline",
     "wrap_attributes_count": 4,
     "wrap_attributes_indent_size": 2
-  }
+  },
+  "wxml.format.endWithNewline": true
 }
