@@ -1,9 +1,9 @@
-<view class="main">
-  <view class="head"></view>
-  <view class="body">
-    <activity-show swiper-list="{{swiperList}}"></activity-show>
-  </view>
-  <view class="foot">
-    <view class="version">卓悦艺考</view>
-  </view>
+<view class="background"></view>
+
+<view class="content-wrapper">
+  <activity-show swiper-list="{{swiperList}}"></activity-show>
 </view>
+    
+<view class="version">卓悦艺考</view>
+
+<view class="tab-bar-placeholder"></view>

@@ -9,6 +9,6 @@
   bind:click="onTap"
   bind:change="onChange"
   bind:image-load="onImageLoad"
-  height="570"
+  height="620"
 >
 </t-swiper>

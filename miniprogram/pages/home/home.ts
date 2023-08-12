@@ -1,4 +1,4 @@
-import { assetsUrl, httpGet } from "../../common/transport";
+import { assetsUrl, getAccessToken, httpGet } from "../../common/transport";
 import { URLSearchParams } from "../../common/url-search-params-polyfill";
 import { login } from "../../common/auth";
 
@@ -28,6 +28,12 @@ Page({
    */
   async onLoad() {
     const accessToken = await login();
+    this.loadPage(accessToken);
+  },
+
+  async onPullDownRefresh() {
+    wx.stopPullDownRefresh();
+    const accessToken = await getAccessToken();
     this.loadPage(accessToken);
   },
 

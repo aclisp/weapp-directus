@@ -1,0 +1,5 @@
+<view class="container">
+  <view class="card" style="background-image: url({{backgroundImageSrc}});">
+    会员卡
+  </view>
+</view>

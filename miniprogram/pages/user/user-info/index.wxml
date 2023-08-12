@@ -1,0 +1,4 @@
+<view class="container">
+  <t-avatar class="user-avatar" size="large" shape="round" icon="user"/>
+  <text class="user-name">神秘用户</text>
+</view>

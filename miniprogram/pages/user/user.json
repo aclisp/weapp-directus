@@ -1,4 +1,12 @@
 {
   "navigationBarTitleText": "会员",
-  "usingComponents": {}
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "user-info": "./user-info",
+    "user-vip-card": "./user-vip-card",
+    "order-group": "./order-group",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
+    "t-cell": "tdesign-miniprogram/cell/cell"
+  }
 }

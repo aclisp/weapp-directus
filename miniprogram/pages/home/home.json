@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "艺考",
   "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "activity-show": "/components/activity-show/index"
   }
