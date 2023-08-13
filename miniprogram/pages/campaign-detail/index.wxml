@@ -8,7 +8,7 @@
   </view>
 
   <t-image t-class="poster" src="{{posterUrl}}" mode="aspectFit" 
-    shape="round" show-menu-by-longpress="true"/>
+    shape="round" show-menu-by-longpress/>
 
   <t-cell-group t-class="products">
     <t-cell wx:for="{{products}}" wx:key="index"
@@ -21,6 +21,6 @@
     />
   </t-cell-group>
 
-  <t-button t-class="buy-button" icon="add-circle" theme="primary">报名</t-button>
+  <t-button t-class="buy-button" icon="add-circle" theme="primary" size="large">报名</t-button>
 
 </view>

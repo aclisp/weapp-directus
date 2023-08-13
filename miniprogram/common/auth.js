@@ -1,12 +1,6 @@
 import { logDebug } from "./logger";
 import { promisify } from "./promisify";
-import {
-  httpGet,
-  saveToken,
-  getAccessToken,
-  directusHostUrl,
-} from "./transport";
-import { URLSearchParams } from "./url-search-params-polyfill";
+import { saveToken, getAccessToken, directusHostUrl } from "./transport";
 import { reportError } from "./errors";
 
 const authLoginUrl = directusHostUrl() + "/auth/login/wechatminiprogram";
@@ -50,6 +44,7 @@ async function wxLogin() {
     return accessToken;
   } catch (err) {
     reportError(err);
+    return undefined;
   }
 }
 

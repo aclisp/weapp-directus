@@ -1,3 +1,5 @@
+import { fetchUserInfo } from "../../common/user";
+
 const orderTagInfos = [
   {
     title: "待付款",
@@ -45,7 +47,10 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad() {},
+  async onLoad() {
+    const user = await fetchUserInfo();
+    console.log("我的用户信息:user=%o", user);
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成

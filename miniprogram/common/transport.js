@@ -9,14 +9,14 @@ const directusHost = "http://192.168.0.109:8055";
 
 /**
  * Promise of Storage
- * @type {Promise<Storage>}
+ * @type {Promise<Storage>|undefined}
  */
 let refreshInProgress = undefined;
 
 /**
  * current user id after authenticate; it is used to prevent access token from overwriting
  * by another login from the same browser.
- * @type {string}
+ * @type {string|undefined}
  */
 let userId = undefined;
 
@@ -69,7 +69,7 @@ export function resetToken() {
  * @param {(string|null)=} options.accessToken - Skip refreshing the access token if it is null.
  * @param {URLSearchParams=} options.params - Global query parameters
  * @param {function=} options.mapResponse - JSON response transformer
- * @returns {Promise} Promise of data with `ok` and `msg`
+ * @returns {Promise<any>} Promise of data with `ok` and `msg`
  */
 export async function httpPost(path, data, options = {}) {
   let {
@@ -118,7 +118,7 @@ export async function httpPost(path, data, options = {}) {
  * @param {(string|null)=} options.accessToken - Skip refreshing the access token if it is null.
  * @param {URLSearchParams=} options.params - Global query parameters
  * @param {function=} options.mapResponse - JSON response transformer
- * @returns {Promise} Promise of data with `ok` and `msg`
+ * @returns {Promise<any>} Promise of data with `ok` and `msg`
  */
 export async function httpGet(path, options = {}) {
   let {

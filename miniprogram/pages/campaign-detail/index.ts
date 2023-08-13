@@ -7,7 +7,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    campaign: {},
     title: [],
     posterUrl: "",
     products: [],
@@ -25,7 +24,6 @@ Page({
       accessToken,
     });
     this.setData({
-      campaign,
       title: campaign.name.split(/\s+/),
       posterUrl: assetsUrl(campaign.poster, accessToken),
       products: campaign.products.map((x: any) => ({
