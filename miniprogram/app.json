@@ -20,6 +20,10 @@
       {
         "pagePath": "pages/user/user",
         "text": "会员"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "测试"
       }
     ]
   },
@@ -30,15 +34,7 @@
     "navigationBarTextStyle": "black"
   },
   "renderer": "webview",
-  "rendererOptions": {
-    "skyline": {
-      "defaultDisplayBlock": true,
-      "disableABTest": true,
-      "sdkVersionBegin": "3.0.0",
-      "sdkVersionEnd": "15.255.255"
-    }
-  },
-  "componentFramework": "glass-easel",
+  "componentFramework": "exparser",
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"
 }

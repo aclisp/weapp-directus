@@ -20,6 +20,11 @@ Component({
         text: "会员",
         url: "pages/user/user",
       },
+      {
+        icon: "tools",
+        text: "测试",
+        url: "pages/logs/logs",
+      },
     ],
   },
 
